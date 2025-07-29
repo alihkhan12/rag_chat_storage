@@ -1,0 +1,27 @@
+__pycache__/
+*.py[cod]
+.env
+logs/
+*.log
+input_docs/*.*
+.vscode/
+.idea/
+
+# Node modules
+node_modules/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Cache files
+*.cache
+.cache/
+
+# Pytest cache
+.pytest_cache/

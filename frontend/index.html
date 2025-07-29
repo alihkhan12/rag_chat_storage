@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RAG Chat Storage</title>
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: 0 auto; padding: 20px; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; margin: 5px; cursor: pointer; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>RAG Chat Storage Test</h1>
+    <div id="status"></div>
+    <button onclick="testHealth()">Test Health</button>
+    <button onclick="testSessions()">List Sessions</button>
+    <button onclick="createSession()">Create Session</button>
+    <div id="results"></div>
+    <script>
+        const API_KEY = 'z9pD3bE7qR#sW8vY!mK2uN4x';
+        const BASE_URL = 'http://localhost:8000';
+        
+        function showStatus(msg, isError = false) {
+            document.getElementById('status').className = isError ? 'status error' : 'status success';
+            document.getElementById('status').textContent = msg;
+        }
+        
+        async function testHealth() {
+            try {
+                const r = await fetch(BASE_URL + '/health/');
+                const d = await r.json();
+                showStatus('Health: ' + d.status);
+            } catch (e) {
+                showStatus('Health check failed: ' + e.message, true);
+            }
+        }
+        
+        async function testSessions() {
+            try {
+                const r = await fetch(BASE_URL + '/sessions/', {headers: {'X-API-KEY': API_KEY}});
+                const d = await r.json();
+                showStatus('Found ' + d.length + ' sessions');
+                document.getElementById('results').innerHTML = '<pre>' + JSON.stringify(d, null, 2) + '</pre>';
+            } catch (e) {
+                showStatus('Failed: ' + e.message, true);
+            }
+        }
+        
+        async function createSession() {
+            try {
+                const r = await fetch(BASE_URL + '/sessions/', {
+                    method: 'POST',
+                    headers: {'X-API-KEY': API_KEY, 'Content-Type': 'application/json'},
+                    body: JSON.stringify({session_name: 'Test ' + new Date().toLocaleTimeString()})
+                });
+                const d = await r.json();
+                showStatus('Created: ' + d.session_name);
+                testSessions();
+            } catch (e) {
+                showStatus('Failed: ' + e.message, true);
+            }
+        }
+        
+        window.onload = testHealth;
+    </script>
+</body>
+</html>

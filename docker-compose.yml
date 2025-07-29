@@ -1,0 +1,72 @@
+services:
+  db:
+    image: pgvector/pgvector:pg15
+    container_name: rag_chat_db
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./scripts/init_pgvector.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-raguser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-securepassword}
+      POSTGRES_DB: ${POSTGRES_DB:-rag_chat_db}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-raguser} -d ${POSTGRES_DB:-rag_chat_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rag_network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag_chat_app
+    restart: unless-stopped
+    volumes:
+      - ./app:/app/app:ro
+      - ./logs:/app/logs
+      - ./input_docs:/app/input_docs
+      - ${HOME}/.cache/huggingface/hub:/root/.cache/huggingface/hub:ro
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-raguser}:${POSTGRES_PASSWORD:-securepassword}@db:5432/${POSTGRES_DB:-rag_chat_db}
+      HF_HUB_OFFLINE: 1
+      TRANSFORMERS_OFFLINE: 1
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - rag_network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: rag_chat_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@ragchat.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin123}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - db
+    networks:
+      - rag_network
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  rag_network:
+    driver: bridge
