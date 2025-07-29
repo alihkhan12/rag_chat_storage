@@ -72,64 +72,78 @@ graph TB
 
 ```
 rag_chat_storage/
-├── 📦 app/                          # FastAPI Backend Application
-│   ├── 🔧 core/                     # Core functionality & configurations
-│   │   ├── rag/                     # RAG-specific components
-│   │   │   ├── chunker.py          # Document chunking logic
-│   │   │   ├── embeddings.py       # Vector embeddings generation
-│   │   │   └── vectorstore.py      # Vector database operations
-│   │   ├── database.py             # Database configuration & connection
-│   │   ├── security.py             # Authentication & API key management
-│   │   ├── logging.py              # Centralized logging configuration
-│   │   ├── limiter.py              # Rate limiting implementation
-│   │   └── exceptions.py           # Custom exception handlers
-│   ├── 🗄️ models/                   # SQLAlchemy database models
-│   │   ├── chat.py                 # Chat sessions & messages models
-│   │   └── documents.py            # Document storage models
-│   ├── 📋 schemas/                  # Pydantic request/response schemas
-│   │   ├── chat.py                 # Chat-related schemas
-│   │   └── documents.py            # Document schemas
-│   ├── 🌐 api/                      # API endpoint routers
-│   │   ├── sessions.py             # Session management endpoints
-│   │   ├── messages.py             # Message CRUD endpoints
-│   │   ├── documents.py            # Document upload/search endpoints
-│   │   ├── rag_chat.py             # RAG chat functionality
-│   │   └── health.py               # Health check endpoints
-│   └── main.py                     # FastAPI application entry point
-├── 🎨 frontend/                     # React Frontend Application
-│   ├── public/                     # Static assets
-│   ├── src/                        # React source code
-│   │   ├── components/             # Reusable UI components
-│   │   ├── pages/                  # Page components
-│   │   │   ├── ChatPage.js         # Main chat interface
-│   │   │   ├── SessionsPage.js     # Session management
-│   │   │   ├── DocumentsPage.js    # Document management
-│   │   │   └── LoginPage.js        # Authentication page
-│   │   ├── services/               # API service layer
-│   │   ├── hooks/                  # Custom React hooks
-│   │   ├── context/                # React context providers
-│   │   └── App.js                  # Main React application
-│   ├── package.json                # NPM dependencies
-│   └── tailwind.config.js          # Tailwind CSS configuration
-├── 🚢 Docker & Deployment
-│   ├── Dockerfile                  # Backend container definition
-│   ├── docker-compose.yml          # Multi-service orchestration
-│   └── scripts/                    # Database initialization scripts
-├── 📄 input_docs/                  # Document ingestion directory
-├── 📊 logs/                        # Application logs
-├── 🧪 tests/                       # Test suites
-├── 📋 Essential Scripts            # Streamlined operation scripts
-│   ├── start_app.sh               # Start full stack application
-│   ├── stop_app.sh                # Stop full stack application
-│   ├── start_backend.sh           # Start backend only
-│   ├── stop_backend.sh            # Stop backend only
-│   ├── test_api.sh                # Test API endpoints
-│   └── test_search.sh             # Test RAG chat functionality
-└── 📝 Documentation
-    ├── README.md                  # Main project documentation
-    ├── README_FRONTEND.md         # Frontend specific documentation
-    ├── requirements.txt           # Python dependencies
-    └── .env                       # Environment configuration
+├── .env                       # Environment configuration
+├── Dockerfile                 # Docker container definition
+├── README.md                  # Main project documentation
+├── app/                       # FastAPI Backend Application
+│   ├── __init__.py            # Package marker
+│   ├── api/                   # API endpoint routers
+│   │   ├── __init__.py        # Package marker
+│   │   ├── documents.py       # Document upload/search endpoints
+│   │   ├── health.py          # Health check endpoints
+│   │   ├── messages.py        # Message CRUD endpoints
+│   │   ├── rag_chat.py        # RAG chat functionality
+│   │   └── sessions.py        # Session management endpoints
+│   ├── core/                  # Core functionality & configurations
+│   │   ├── __init__.py        # Package marker
+│   │   ├── database.py        # Database configuration & connection
+│   │   ├── exceptions.py      # Custom exception handlers
+│   │   ├── limiter.py         # Rate limiting implementation
+│   │   ├── logging.py         # Centralized logging configuration
+│   │   ├── rag/               # RAG-specific components
+│   │   │   ├── __init__.py    # Package marker
+│   │   │   ├── chunker.py     # Document chunking logic
+│   │   │   ├── embeddings.py  # Vector embeddings generation
+│   │   │   └── vectorstore.py # Vector database operations
+│   │   └── security.py        # Authentication & API key management
+│   ├── main.py                # FastAPI application entry point
+│   ├── models/                # SQLAlchemy database models
+│   │   ├── __init__.py        # Package marker
+│   │   ├── chat.py            # Chat sessions & messages models
+│   │   └── documents.py       # Document storage models
+│   └── schemas/               # Pydantic request/response schemas
+│       ├── __init__.py        # Package marker
+│       ├── chat.py            # Chat-related schemas
+│       └── documents.py       # Document schemas
+├── create_corpus.sh           # Script for corpus creation
+├── docker-compose.yml         # Multi-service orchestration
+├── frontend/                  # React Frontend Application
+│   ├── package-lock.json      # NPM lock file
+│   ├── package.json           # NPM dependencies
+│   ├── postcss.config.js      # PostCSS configuration
+│   ├── src/                   # React source code
+│   │   ├── App.js             # Main React application
+│   │   ├── context/           # React context
+│   │   │   └── AuthContext.js # Authentication context
+│   │   ├── hooks/             # Custom React hooks
+│   │   │   └── useApi.js      # API hook
+│   │   ├── index.js           # Application entry point
+│   │   ├── pages/             # Page components
+│   │   │   ├── ChatPage.js    # Main chat interface
+│   │   │   ├── DocumentsPage.js # Document management
+│   │   │   ├── LoginPage.js   # Authentication page
+│   │   │   └── SessionsPage.js # Session management
+│   │   └── services/          # API service layer
+│   │       └── api.js         # API service interactions
+│   └── tailwind.config.js     # Tailwind CSS configuration
+├── input_docs/                # Document ingestion directory
+│   ├── database_technologies.yaml
+│   ├── fastapi_python_guide.md
+│   ├── machine_learning_fundamentals.txt
+│   ├── natural_language_processing.md
+│   ├── rag_system_features.json
+│   └── vector_embeddings_search.txt
+├── monitor.sh                 # Monitoring script
+├── requirements.txt           # Python dependencies
+├── scripts/                   # Database initialization scripts
+│   └── init_pgvector.sql      # PostgreSQL setup script
+├── setup_app.sh               # Setup script for the entire application
+├── start_app.sh               # Start full stack application
+├── start_backend.sh           # Start backend only
+├── stop_app.sh                # Stop full stack application
+├── stop_backend.sh            # Stop backend only
+├── test_api.sh                # Test API endpoints
+└── test_search.sh             # Test RAG chat functionality
 ```
 
 ## ✨ Key Features
@@ -165,6 +179,21 @@ rag_chat_storage/
 - **Session Navigation**: Intuitive conversation management
 
 ## 🛠️ Essential Shell Scripts
+
+### 🔧 **0. setup_app.sh** - Complete Application Setup
+- **Purpose**: One-click setup for the entire RAG Chat Storage application
+- **Features**:
+  - System requirements validation (Python, Node.js, Docker)
+  - Python virtual environment creation and activation
+  - Automatic installation of all backend dependencies
+  - Frontend dependencies installation and configuration
+  - Environment file creation with sensible defaults
+  - Project directory structure setup
+  - Script permissions configuration
+  - Basic validation and testing
+  - Comprehensive setup summary and next steps
+- **Usage**: `./setup_app.sh`
+- **Interactive**: Prompts for user confirmation and customization options
 
 ### 🚀 **1. start_app.sh** - Full Stack Application
 - **Purpose**: Starts both backend Docker services and React frontend
@@ -235,16 +264,61 @@ git clone <repository-url>
 cd rag_chat_storage
 ```
 
-### 2. **Environment Setup**
-```bash
-# Copy environment template
-cp .env.example .env
+### 2. **🔧 One-Click Setup (Recommended)**
 
-# Update environment variables
-vim .env
+Use our comprehensive setup script that handles everything automatically:
+
+```bash
+# Run the complete setup script
+./setup_app.sh
+
+# This script will:
+# ✅ Check system requirements (Python, Node.js, Docker)
+# ✅ Create Python virtual environment
+# ✅ Install all backend dependencies
+# ✅ Install all frontend dependencies  
+# ✅ Create .env configuration file
+# ✅ Set up project directories
+# ✅ Make all scripts executable
+# ✅ Run basic validation tests
 ```
 
-### 3. **Start Full Application**
+**What the setup script does:**
+- **System Check**: Validates Python 3.9+, Node.js 18+, npm, and Docker installation
+- **Virtual Environment**: Creates and configures Python virtual environment
+- **Dependencies**: Installs all Python packages from requirements.txt
+- **Frontend Setup**: Installs all npm packages and dependencies
+- **Configuration**: Creates .env file with sensible defaults
+- **Project Structure**: Creates necessary directories (logs/, input_docs/, tests/)
+- **Scripts**: Makes all shell scripts executable
+- **Validation**: Runs import tests and build verification
+
+### 3. **Manual Setup (Alternative)**
+
+If you prefer manual setup or need custom configuration:
+
+```bash
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install backend dependencies
+pip install -r requirements.txt
+
+# Install frontend dependencies
+cd frontend
+npm install
+cd ..
+
+# Create environment file
+cp .env.example .env  # Edit as needed
+vim .env
+
+# Make scripts executable
+chmod +x *.sh
+```
+
+### 4. **Start Full Application**
 ```bash
 # Start all services (backend + frontend)
 ./start_app.sh
@@ -587,7 +661,8 @@ Please use GitHub Issues for:
 ## 🎯 **Quick Commands Reference**
 
 ```bash
-# Essential Operations
+# Setup & Essential Operations
+./setup_app.sh          # Complete project setup (run first)
 ./start_app.sh          # Start full stack
 ./stop_app.sh           # Stop all services  
 ./start_backend.sh      # Backend only
