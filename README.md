@@ -25,18 +25,16 @@ A production-ready **Retrieval-Augmented Generation (RAG)** chat application bui
 
 ```mermaid
 graph TB
-    subgraph "Frontend Layer"
-        UI[React UI - Port 3000]
-        UI --> Router[React Router]
-        Router --> Pages[Pages: Chat, Sessions, Documents]
-        Pages --> API_Service[API Service Layer]
+    
+    subgraph "External Services"
+        HuggingFace[Hugging Face Models]
+        PgAdmin[Database Admin - Port 5050]
     end
     
-    subgraph "Backend Layer"
-        FastAPI[FastAPI Backend - Port 8000]
-        FastAPI --> Auth[API Key Authentication]
-        FastAPI --> RateLimit[Rate Limiting]
-        FastAPI --> CORS[CORS Middleware]
+    subgraph "Data Layer"
+        PostgreSQL[PostgreSQL + pgvector]
+        FileSystem[Document Storage]
+        Cache[In-Memory Cache]
     end
     
     subgraph "Core Services"
@@ -46,15 +44,18 @@ graph TB
         DocProcessor[Document Processor]
     end
     
-    subgraph "Data Layer"
-        PostgreSQL[PostgreSQL + pgvector]
-        FileSystem[Document Storage]
-        Cache[In-Memory Cache]
+    subgraph "Backend Layer"
+        FastAPI[FastAPI Backend - Port 8000]
+        FastAPI --> Auth[API Key Authentication]
+        FastAPI --> RateLimit[Rate Limiting]
+        FastAPI --> CORS[CORS Middleware]
     end
     
-    subgraph "External Services"
-        HuggingFace[Hugging Face Models]
-        PgAdmin[Database Admin - Port 5050]
+    subgraph "Frontend Layer"
+        UI[React UI - Port 3000]
+        UI --> Router[React Router]
+        Router --> Pages[Pages: Chat, Sessions, Documents]
+        Pages --> API_Service[API Service Layer]
     end
     
     UI --> FastAPI
